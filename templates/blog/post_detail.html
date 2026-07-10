@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<article class="mt-4">
+    <h1 class="display-4">{{ post.title }}</h1>
+    <p class="text-muted">By {{ post.author.username }} | Published on {{ post.created_at|date:"F j, Y" }}</p>
+    <hr>
+    <div class="lead">
+        {{ post.content|linebreaks }}
+    </div>
+    
+    <div class="mt-5">
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">Back to List</a>
+        
+        {% if user == post.author %}
+            <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">Edit Post</a>
+            <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

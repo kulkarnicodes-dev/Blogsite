@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Recent Posts</h2>
+    {% for post in posts %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
+                <p class="text-muted">By {{ post.author }} on {{ post.created_at }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
