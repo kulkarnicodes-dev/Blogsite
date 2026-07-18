@@ -1,21 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BlogSite{% endblock %}</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>BlogSite</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f7f7fb;
+            color: #1a1d23;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Navbar */
+        .site-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #ecedf1;
+            padding: 0.9rem 0;
+        }
+
+        .site-navbar .navbar-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .site-brand {
+            font-weight: 800;
+            font-size: 1.35rem;
+            letter-spacing: -0.02em;
+            color: #1a1d23;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .site-brand i {
+            background: linear-gradient(135deg, #6a5cff, #4f8cff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link-btn {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.5rem 0.9rem;
+            border-radius: 8px;
+            color: #4a4f5a;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .nav-link-btn:hover {
+            background: #f1f2f5;
+            color: #1a1d23;
+        }
+
+        .nav-link-primary {
+            background: linear-gradient(135deg, #6a5cff, #4f8cff);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.92rem;
+            text-decoration: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .nav-link-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(106, 92, 255, 0.35);
+            color: #fff;
+        }
+
+        .nav-link-logout {
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            color: #8a8f99;
+            padding: 0.5rem 0.6rem;
+            transition: color 0.15s ease;
+        }
+
+        .nav-link-logout:hover {
+            color: #ff3838;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 22px;
+            background: #ecedf1;
+            margin: 0 0.25rem;
+        }
+
+        /* Footer */
+        .site-footer {
+            border-top: 1px solid #ecedf1;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            color: #a3a7b0;
+            font-size: 0.85rem;
+            margin-top: 3rem;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
 </head>
-<body class="container mt-4">
-    <nav class="mb-4">
-        <a href="{% url 'post_list' %}" class="btn btn-outline-primary">Home</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'post_create' %}" class="btn btn-success">New Post</a>
-            <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                {% csrf_token %}<button type="submit" class="btn btn-link">Logout</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a>
-        {% endif %}
+<body>
+    <nav class="site-navbar">
+        <div class="navbar-inner">
+            <a href="{% url 'post_list' %}" class="site-brand">
+                <i class="bi bi-pencil-square"></i> BlogSite
+            </a>
+
+            <div class="nav-links">
+                <a href="{% url 'post_list' %}" class="nav-link-btn">Home</a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'post_create' %}" class="nav-link-primary">
+                        <i class="bi bi-plus-lg"></i> New Post
+                    </a>
+                    <div class="nav-divider"></div>
+                    <form action="{% url 'logout' %}" method="post" class="d-inline m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link-logout">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link-btn">Login</a>
+                    <a href="{% url 'register' %}" class="nav-link-primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
     </nav>
-    {% block content %}{% endblock %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        &copy; {% now "Y" %} BlogSite. All rights reserved.
+    </footer>
 </body>
 </html>
