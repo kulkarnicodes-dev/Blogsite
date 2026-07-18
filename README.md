@@ -1,3 +1,9 @@
+[![Django CI](https://github.com/kulkarnicodes-dev/Blogsite/actions/workflows/django.yml/badge.svg)](https://github.com/kulkarnicodes-dev/Blogsite/actions/workflows/django.yml)
+
+![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)
+![Django](https://img.shields.io/badge/Django-5.2-success?logo=django)
+![Render](https://img.shields.io/badge/Deploy-Render-46E3B7?logo=render)
+![License](https://img.shields.io/badge/License-MIT-green)
 <div align="center">
 
 # 📝 Django Blog Site
