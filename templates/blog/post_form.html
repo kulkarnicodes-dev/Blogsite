@@ -1,17 +1,134 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<div class="card shadow-sm mx-auto" style="max-width: 600px;">
-    <div class="card-body">
-        <h2 class="card-title mb-4">{% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Save Post</button>
-                <a href="{% url 'post_list' %}" class="btn btn-outline-secondary">Cancel</a>
+<div class="form-wrapper d-flex align-items-center justify-content-center">
+    <div class="card form-card shadow-lg mx-auto">
+        <div class="card-body p-4 p-md-5">
+            <div class="text-center mb-4">
+                <div class="form-icon mb-3">
+                    <i class="bi {% if form.instance.pk %}bi-pencil-fill{% else %}bi-file-earmark-plus-fill{% endif %}"></i>
+                </div>
+                <h2 class="fw-bold mb-1">
+                    {% if form.instance.pk %}Edit Post{% else %}New Post{% endif %}
+                </h2>
+                <p class="text-muted mb-0">
+                    {% if form.instance.pk %}Update your story below{% else %}Share your story with the world{% endif %}
+                </p>
             </div>
-        </form>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger py-2 small">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label small text-muted mb-1">
+                            {{ field.label }}
+                        </label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text small">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex gap-2 mt-4">
+                    <a href="{% url 'post_list' %}" class="btn btn-cancel w-50 py-2 fw-semibold">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-save w-50 py-2 fw-semibold">
+                        {% if form.instance.pk %}Save Changes{% else %}Publish Post{% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
+<style>
+    .form-wrapper {
+        min-height: 80vh;
+        padding: 2rem 1rem;
+    }
+
+    .form-card {
+        max-width: 620px;
+        width: 100%;
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .form-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #6a5cff, #4f8cff);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.75rem;
+    }
+
+    .form-card .form-control,
+    .form-card input[type="text"],
+    .form-card input[type="email"],
+    .form-card textarea,
+    .form-card select {
+        border-radius: 8px;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid #dfe3ea;
+        width: 100%;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-card textarea {
+        min-height: 220px;
+        resize: vertical;
+    }
+
+    .form-card input:focus,
+    .form-card textarea:focus,
+    .form-card select:focus {
+        border-color: #6a5cff;
+        box-shadow: 0 0 0 3px rgba(106, 92, 255, 0.15);
+        outline: none;
+    }
+
+    .form-card .btn-cancel {
+        background: #f1f2f5;
+        border: none;
+        border-radius: 8px;
+        color: #4a4f5a;
+        transition: background 0.15s ease;
+    }
+
+    .form-card .btn-cancel:hover {
+        background: #e4e6ea;
+        color: #2c2f36;
+    }
+
+    .form-card .btn-save {
+        background: linear-gradient(135deg, #6a5cff, #4f8cff);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-card .btn-save:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(106, 92, 255, 0.35);
+        color: #fff;
+    }
+</style>
 {% endblock %}
