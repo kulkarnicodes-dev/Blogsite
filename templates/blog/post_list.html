@@ -1,12 +1,103 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h2>Recent Posts</h2>
-    {% for post in posts %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h3><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h3>
-                <p class="text-muted">By {{ post.author }} on {{ post.created_at }}</p>
-            </div>
+<div class="feed-wrapper mx-auto">
+    <div class="feed-header mb-4">
+        <h2 class="fw-bold mb-1">Recent Posts</h2>
+        <p class="text-muted mb-0">Latest stories from the community</p>
+    </div>
+
+    {% if posts %}
+        {% for post in posts %}
+            <a href="{% url 'post_detail' post.pk %}" class="post-card-link">
+                <div class="card post-card mb-3">
+                    <div class="card-body d-flex align-items-start gap-3">
+                        <div class="post-avatar">
+                            {{ post.author.username|default:post.author|first|upper }}
+                        </div>
+                        <div class="flex-grow-1">
+                            <h3 class="post-card-title mb-1">{{ post.title }}</h3>
+                            <p class="text-muted small mb-0">
+                                By {{ post.author.username|default:post.author }}
+                                &middot;
+                                {{ post.created_at|date:"F j, Y" }}
+                            </p>
+                        </div>
+                        <i class="bi bi-arrow-right post-card-arrow"></i>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state text-center py-5">
+            <i class="bi bi-journal-x empty-icon mb-3"></i>
+            <p class="text-muted mb-0">No posts yet. Be the first to share something!</p>
         </div>
-    {% endfor %}
+    {% endif %}
+</div>
+
+<style>
+    .feed-wrapper {
+        max-width: 760px;
+        padding: 2.5rem 1rem;
+    }
+
+    .post-card-link {
+        text-decoration: none;
+        display: block;
+    }
+
+    .post-card {
+        border: 1px solid #ecedf1;
+        border-radius: 12px;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+
+    .post-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(20, 20, 43, 0.08);
+        border-color: #dcdfe6;
+    }
+
+    .post-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6a5cff, #4f8cff);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .post-card-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #1a1d23;
+    }
+
+    .post-card-arrow {
+        align-self: center;
+        color: #c3c6cf;
+        font-size: 1.1rem;
+        transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .post-card:hover .post-card-arrow {
+        transform: translateX(4px);
+        color: #6a5cff;
+    }
+
+    .empty-state {
+        border: 1px dashed #dfe3ea;
+        border-radius: 12px;
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+        color: #c3c6cf;
+    }
+</style>
 {% endblock %}
