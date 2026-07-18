@@ -1,21 +1,128 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<article class="mt-4">
-    <h1 class="display-4">{{ post.title }}</h1>
-    <p class="text-muted">By {{ post.author.username }} | Published on {{ post.created_at|date:"F j, Y" }}</p>
-    <hr>
-    <div class="lead">
+<article class="post-detail mx-auto">
+    <div class="post-header mb-4">
+        <h1 class="post-title mb-3">{{ post.title }}</h1>
+        <div class="d-flex align-items-center gap-2 author-meta">
+            <div class="author-avatar">
+                {{ post.author.username|first|upper }}
+            </div>
+            <div>
+                <p class="mb-0 fw-semibold">{{ post.author.username }}</p>
+                <p class="mb-0 text-muted small">Published on {{ post.created_at|date:"F j, Y" }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-content lead">
         {{ post.content|linebreaks }}
     </div>
-    
-    <div class="mt-5">
-        <a href="{% url 'post_list' %}" class="btn btn-secondary">Back to List</a>
-        
+
+    <hr class="my-5">
+
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'post_list' %}" class="btn btn-back">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+
         {% if user == post.author %}
-            <a href="{% url 'post_update' post.pk %}" class="btn btn-warning">Edit Post</a>
-            <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger">Delete</a>
+            <a href="{% url 'post_update' post.pk %}" class="btn btn-edit ms-auto">
+                <i class="bi bi-pencil-fill"></i> Edit Post
+            </a>
+            <a href="{% url 'post_delete' post.pk %}" class="btn btn-delete">
+                <i class="bi bi-trash-fill"></i> Delete
+            </a>
         {% endif %}
     </div>
 </article>
+
+<style>
+    .post-detail {
+        max-width: 760px;
+        padding: 2.5rem 1rem;
+    }
+
+    .post-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        color: #1a1d23;
+    }
+
+    .author-meta {
+        padding-top: 0.25rem;
+    }
+
+    .author-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6a5cff, #4f8cff);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .post-content {
+        font-size: 1.1rem;
+        line-height: 1.85;
+        color: #333740;
+    }
+
+    .post-content p {
+        margin-bottom: 1.25rem;
+    }
+
+    .btn-back {
+        background: #f1f2f5;
+        border: none;
+        border-radius: 8px;
+        color: #4a4f5a;
+        padding: 0.6rem 1.1rem;
+        font-weight: 600;
+        transition: background 0.15s ease;
+    }
+
+    .btn-back:hover {
+        background: #e4e6ea;
+        color: #2c2f36;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #ffb74f, #ff9d4f);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        padding: 0.6rem 1.1rem;
+        font-weight: 600;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(255, 157, 79, 0.35);
+        color: #fff;
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ff5c5c, #ff3838);
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        padding: 0.6rem 1.1rem;
+        font-weight: 600;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(255, 56, 56, 0.35);
+        color: #fff;
+    }
+</style>
 {% endblock %}
